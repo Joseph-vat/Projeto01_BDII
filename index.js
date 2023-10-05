@@ -1,15 +1,16 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 
-const bancoDeDados = new Sequelize('projeto', 'postgres', 'postgres', {
+
+const BancoDeDados = new Sequelize('projeto', 'postgres', 'postgres', {
   host: 'localhost',
   dialect: 'postgres'
 });
 
 async function conectar() {
   try {
-    await bancoDeDados.authenticate();
-    console.log('Conectado com sucesso!');
+    await BancoDeDados.authenticate();
+    console.log('ok');
   } catch (error) {
     console.error('A conexão fallhou :(', error);
   }
@@ -17,21 +18,28 @@ async function conectar() {
 
 conectar();
 
-const Ocorrencia = bancoDeDados.define('Ocorrencia', {
-  id:{
-    type:DataTypes.UUID,
-    defaultValue: DataTypes.UUID,
-    primaryKey: true
+const Ocorrencia = BancoDeDados.define('Ocorrencia', {
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
   },
-
   nome: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  email: {
+  tipo: {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  datHora: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  geometria: {
+    type: DataTypes.GEOMETRY,
+    
+  }
 });
 
 
