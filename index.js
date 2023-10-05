@@ -1,22 +1,29 @@
 const { Sequelize, DataTypes } = require('sequelize');
+const { v4: uuidv4 } = require('uuid');
 
-const tabela = new Sequelize('atividade', 'postgres', 'postgres', {
+const bancoDeDados = new Sequelize('projeto', 'postgres', 'postgres', {
   host: 'localhost',
   dialect: 'postgres'
 });
 
 async function conectar() {
   try {
-    await tabela.authenticate();
-    console.log('ok');
+    await bancoDeDados.authenticate();
+    console.log('Conectado com sucesso!');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('A conexão fallhou :(', error);
   }
 }
 
 conectar();
 
-const Usuario = tabela.define('Usuario', {
+const Ocorrencia = bancoDeDados.define('Ocorrencia', {
+  id:{
+    type:DataTypes.UUID,
+    defaultValue: DataTypes.UUID,
+    primaryKey: true
+  },
+
   nome: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -29,7 +36,7 @@ const Usuario = tabela.define('Usuario', {
 
 
 async function sincronizar() {
-  await Usuario.sync();
+  await Ponto.sync();
   console.log("Sincronizando");
 }
 
