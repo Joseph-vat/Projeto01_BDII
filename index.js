@@ -45,7 +45,7 @@ const Ocorrencia = bancoDeDados.define('Ocorrencia', {
   geometria: {
     type: DataTypes.GEOMETRY,
     
-  // }
+  }
 });
 
 async function sincronizar() {
