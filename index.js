@@ -19,11 +19,11 @@ async function conectar() {
 conectar();
 
 const Ocorrencia = BancoDeDados.define('Ocorrencia', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
-    primaryKey: true,
-  },
+  // id: {
+  //   type: DataTypes.UUID,
+  //   defaultValue: DataTypes.UUIDV4,
+  //   primaryKey: true,
+  // },
   nome: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -32,19 +32,18 @@ const Ocorrencia = BancoDeDados.define('Ocorrencia', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  datHora: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  geometria: {
-    type: DataTypes.GEOMETRY,
+  // datHora: {
+  //   type: DataTypes.DATE,
+  //   allowNull: false,
+  // },
+  // geometria: {
+  //   type: DataTypes.GEOMETRY,
     
-  }
+  // }
 });
 
-
 async function sincronizar() {
-  await Usuario.sync();
+  await Ocorrencia.sync();
   console.log("Sincronizando");
 }
 
