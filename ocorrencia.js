@@ -1,22 +1,23 @@
 const { Sequelize, DataTypes, UUID } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
+const bancoDeDados = require('./banco')
 
 
 //..................... Definindo a estrutura da tabela Ocorrencia ...................
 const Ocorrencia = bancoDeDados.define('Ocorrencia', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
-  },
+  // id: {
+  //   type: DataTypes.UUID,
+  //   defaultValue: DataTypes.UUIDV4,
+  //   primaryKey: true,
+  // },
   nome: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
-  tipo: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+  // tipo: {
+  //   type: DataTypes.STRING,
+  //   allowNull: false,
+  // },
   // datHora: {
   //   type: DataTypes.DATE,
   //   allowNull: false
@@ -34,3 +35,5 @@ async function sincronizar() {
 }
 
 sincronizar();
+
+module.exports = Ocorrencia;

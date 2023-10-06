@@ -18,4 +18,4 @@ const bancoDeDados = new Sequelize('projeto', 'postgres', 'postgres', {
   
   conectar();
   
-  module.exports = { bancoDeDados }
+  module.exports = bancoDeDados;
