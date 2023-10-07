@@ -6,25 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <meta http-equiv="refresh" content="5"> -->
     <title>Disque Denuncia</title>
+    <link rel="stylesheet" href="style.css">
     
 </head>
 
 <body>
-    <form>
-        <!-- Etiqueta para o campo de entrada -->
-        <label for="campoDeTexto">Titulo:</label>
-        
-        <!-- Campo de entrada de texto -->
-        <input type="text" id="campoDeTexto" name="dadosInput" placeholder="Digite aqui!">
-        <input type="text" id="campoDeTexto2" name="dadosInput" placeholder="Digite aqui!">
-        
-        <!-- Botão de envio do formulário -->
-        <button onclick="salvando()" type="submit">Enviar</button>
-       <a href="https://www.instagram.com/teofilosoficial/">    <button onclick="listar()" type="submit">Listar</button></a> 
-    </form>
-    <div id="resposta">Vazio</div>
+    <div id="form-container">
+        <h2 id="title">Adicionar Denúncia</h2>
+        <form id="address-form">
+            <div id="map"></div>
+
+             <!-- Campo de entrada de texto 1 -->
+            <label for="campoDeTexto">Título:</label>
+            <input type="text" id="campoDeTexto" name="campoDeTexto" required>
+            
+            <!-- Campo de entrada de texto 2 -->
+            <label for="campoDeTexto2">Data:</label>
+            <input type="text" id="campoDeTexto2" name="campoDeTexto2" required>
+           
+            <!-- Botão de envio do formulário -->
+            <div id="botoes">
+                <button onclick="salvando()" type="submit">Enviar</button>
+                <button onclick="listar()" type="submit">Listar</button>
+            </div>
+        </form>
+    </div>
+    <div id="resposta"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=&v=weekly" async defer></script>
     <script src="front.js"></script>
     
 </body>
-
 </html>
