@@ -14,6 +14,10 @@ const Ocorrencia = bancoDeDados.define('Ocorrencia', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  nome2: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   // tipo: {
   //   type: DataTypes.STRING,
   //   allowNull: false,
