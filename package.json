@@ -16,10 +16,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "cors": "^2.8.5",
     "tsx": "^3.13.0",
     "uuid": "^9.0.1"
-  }
+  },
+  "description": ""
 }

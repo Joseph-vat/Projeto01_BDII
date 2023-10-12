@@ -18,7 +18,7 @@ app.post('/ocorrencia', async (req, res) => {
 app.get('/ocorrencia', async (req, res) => {
     const lista = await Ocorrencia.findAll();
     console.log(lista);
-    res.json(lista);
+    res.send(JSON.stringify(lista));
 })
 
 app.listen(3333, () => {
