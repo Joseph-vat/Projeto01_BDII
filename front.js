@@ -1,10 +1,7 @@
-let map;
-let marker;
 
-let center = {lat: -6.888463202449027, lng: -38.558930105104125};
- let novoMarcador;
- let latitude;
- let longitude
+let center = { lat: -6.888463202449027, lng: -38.558930105104125 }; 77
+let novoMarcador, map, unico = true;
+let latitude, longitude;
 
 
 
@@ -12,39 +9,46 @@ function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         center: center,
         zoom: 14,
-      });
-
-    
-  map.addListener('click', (event) => { 
-    novoMarcador = new google.maps.Marker({
-      position: event.latLng,
-      map: map,
-      title: document.getElementById('campoDeTexto').value,
     });
-    latitude = novoMarcador.getPosition().lat();
-    longitude = novoMarcador.getPosition().lng();
-  });
 
+
+    map.addListener('click', (event) => {
+        if (unico) {
+            novoMarcador = new google.maps.Marker({
+                position: event.latLng,
+                map: map,
+                title: document.getElementById('titulo').value,
+            });
+            latitude = novoMarcador.getPosition().lat();
+            longitude = novoMarcador.getPosition().lng();
+            unico = false;
+        }
+    });
 }
 
 
+initMap();
 
 function salvando() {
-    // const nome = document.getElementById('nome').value;
-    const obj = {
-        nome: latitude,
-        nome2: longitude     
-    }; 
+    const titulo = document.getElementById('titulo').value;
+    const tipo = document.getElementById('tipo').value;
+    const dataHora = document.getElementById('dataHora').value;
+    const data = dataHora.split("T")[0]; // Separa a data
+    const hora = dataHora.split("T")[1]; // Separa a hora
 
-    console.log("entrou no salvando");  
-    console.log({obj});
+    console.log(titulo);
 
-    // const objeto = {
-    //     nome: document.getElementById('campoDeTexto').value,
-    //     nome2: document.getElementById('campoDeTexto2').value
-    // }
+    const objetoOcorrencia = {
+        id: "1234546",
+        titulo: titulo,
+        tipo: tipo,
+        data: data,
+        hora: hora, 
+        latitude: latitude,
+        longitude: longitude,
+    };
 
-    // console.log(obj);
+    unico = true;
 
     fetch('http://localhost:3333/ocorrencia', {
         method: "POST",
@@ -52,10 +56,11 @@ function salvando() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(objeto)
-    })
-        .then(res => alert("Salvo com sucesso")
-        ).catch(error => alert("Falha ao salvar"))
+        body: JSON.stringify(objetoOcorrencia)
+    }).then(res => alert("Salvo com sucesso")
+    ).catch(error => alert("Falha ao salvar"))
+
+    location.reload();
 };
 
 function listar() {
@@ -63,7 +68,7 @@ function listar() {
     fetch('http://localhost:3333/ocorrencia', {
         method: "GET",
         headers: {
-            'Accept':'application/json',
+            'Accept': 'application/json',
         }
     }).then(response => {
         if (!response.ok) {

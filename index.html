@@ -7,8 +7,6 @@
     <!-- <meta http-equiv="refresh" content="5"> -->
     <title>Disque Denuncia</title>
     <link rel="stylesheet" href="style.css">
-    <script src="../Projeto01_BDII/front.js"></script>
-
     
 </head>
 
@@ -19,13 +17,16 @@
             <div id="map"></div>
 
              <!-- Campo de entrada de texto 1 -->
-            <label for="campoDeTexto">Título:</label>
-            <input type="text" id="campoDeTexto" name="campoDeTexto" required>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
             
             <!-- Campo de entrada de texto 2 -->
-            <label for="campoDeTexto2">Data:</label>
-            <input type="text" id="campoDeTexto2" name="campoDeTexto2" required>
-           
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" required placeholder="Info...">
+
+            <label for="dataHora">Data e Hora:</label>
+            <input type="datetime-local" id="dataHora" name="data-hora">
+
             <!-- Botão de envio do formulário -->
             <div id="botoes">
                 <button onclick="salvando()" type="submit">Enviar</button>

@@ -1,35 +1,33 @@
 const { Sequelize, DataTypes, UUID } = require('sequelize');
-const { v4: uuidv4 } = require('uuid');
 const bancoDeDados = require('./banco')
+const pgp = require('pg-promise')();
 
 
 //..................... Definindo a estrutura da tabela Ocorrencia ...................
 const Ocorrencia = bancoDeDados.define('Ocorrencia', {
-  // id: {
-  //   type: DataTypes.UUID,
-  //   defaultValue: DataTypes.UUIDV4,
-  //   primaryKey: true,
-  // },
-  nome: {
+  id: {
+    type: DataTypes.STRING,
+    primaryKey: true,
+  },
+  titulo: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  nome2: {
+  tipo: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  // tipo: {
-  //   type: DataTypes.STRING,
-  //   allowNull: false,
-  // },
-  // datHora: {
-  //   type: DataTypes.DATE,
-  //   allowNull: false
-  // },
-  // geometria: {
-  //   type: DataTypes.GEOMETRY,
-
-  // }
+  data: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  hora: {
+    type: DataTypes.TIME,
+    allowNull: false
+  },
+  geometria: {
+    type: DataTypes.GEOMETRY,
+  }
 });
 
 
