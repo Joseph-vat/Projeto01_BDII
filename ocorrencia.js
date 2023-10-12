@@ -2,7 +2,6 @@ const { Sequelize, DataTypes, UUID } = require('sequelize');
 const bancoDeDados = require('./banco')
 const pgp = require('pg-promise')();
 
-
 //..................... Definindo a estrutura da tabela Ocorrencia ...................
 const Ocorrencia = bancoDeDados.define('Ocorrencia', {
   id: {
@@ -29,7 +28,6 @@ const Ocorrencia = bancoDeDados.define('Ocorrencia', {
     type: DataTypes.GEOMETRY,
   }
 });
-
 
 async function sincronizar() {
   await Ocorrencia.sync();

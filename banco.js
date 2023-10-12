@@ -1,10 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-
-
-const bancoDeDados = new Sequelize('projeto', 'postgres', 'postgres', {
-    host: 'localhost',
-    dialect: 'postgres'
+const bancoDeDados = new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, {
+    host: process.env.PG_HOST ,
+    dialect: 'postgres' 
   });
   
   async function conectar() {

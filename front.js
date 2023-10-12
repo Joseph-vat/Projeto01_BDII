@@ -1,9 +1,7 @@
 
-let center = { lat: -6.888463202449027, lng: -38.558930105104125 }; 77
+let center = { lat: -6.888463202449027, lng: -38.558930105104125 };
 let novoMarcador, map, unico = true;
 let latitude, longitude;
-
-
 
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -11,13 +9,13 @@ function initMap() {
         zoom: 14,
     });
 
-
     map.addListener('click', (event) => {
         if (unico) {
             novoMarcador = new google.maps.Marker({
                 position: event.latLng,
                 map: map,
                 title: document.getElementById('titulo').value,
+                draggable: true
             });
             latitude = novoMarcador.getPosition().lat();
             longitude = novoMarcador.getPosition().lng();
@@ -26,29 +24,22 @@ function initMap() {
     });
 }
 
-
-initMap();
-
-function salvando() {
+function salvar() {
     const titulo = document.getElementById('titulo').value;
     const tipo = document.getElementById('tipo').value;
     const dataHora = document.getElementById('dataHora').value;
     const data = dataHora.split("T")[0]; // Separa a data
     const hora = dataHora.split("T")[1]; // Separa a hora
 
-    console.log(titulo);
-
     const objetoOcorrencia = {
-        id: "1234546",
+        id: "idTTemp",
         titulo: titulo,
         tipo: tipo,
         data: data,
-        hora: hora, 
+        hora: hora,
         latitude: latitude,
         longitude: longitude,
     };
-
-    unico = true;
 
     fetch('http://localhost:3333/ocorrencia', {
         method: "POST",
@@ -60,11 +51,11 @@ function salvando() {
     }).then(res => alert("Salvo com sucesso")
     ).catch(error => alert("Falha ao salvar"))
 
+    unico = true;
     location.reload();
 };
 
 function listar() {
-    const inserir = document.getElementById('resposta');
     fetch('http://localhost:3333/ocorrencia', {
         method: "GET",
         headers: {
@@ -75,58 +66,37 @@ function listar() {
             throw new Error('Erro na requisição');
         }
         return response.json();
-    })
-        .then(data => {
-            console.log(data);
-            inserir.innerHTML = `${data}`
-        })
-        .catch(error => {
+    }).then(data => {
+        data.forEach(data => {
+            const { geometria, titulo } = data;
+            const latitude = geometria.coordinates[1]; // Assumindo que latitude está na posição 1
+            const longitude = geometria.coordinates[0];
+
+            // Cria um marcador
+            const marcador = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map, // 'map' é a referência para seu mapa do Google Maps
+                title: titulo, // Título do marcador (exibido quando o usuário passa o mouse sobre o marcador)
+            });
+
+            const janelaInfo = `
+              <div id="content">
+                <div id="siteNotice">
+                </div>
+                <h2> ${data.titulo}</h2>
+                <p> <b> Tipo: </b> ${data.tipo}</p>
+                <p> <b> Data: </b> ${data.data}</p>
+                <p> <b> Hora: </b> ${data.hora}</p>
+                </div>
+              </div>`;
+            marcador.addListener('click', () => {
+                const infoWindow = new google.maps.InfoWindow({
+                    content: janelaInfo,
+                });
+                infoWindow.open(map, marcador);
+            });
+        }).catch(error => {
             console.error('Erro:', error);
         });
+    })
 };
-
-
-
-
-// function initMap() {
-//     var map = new google.maps.Map(document.getElementById('map'), {
-//         center: { lat: -23.550520, lng: -46.633308 },
-//         zoom: 14
-//     });
-
-//     var geocoder = new google.maps.Geocoder();
-
-//     google.maps.event.addListener(map, 'click', function(event) {
-//         var marker = new google.maps.Marker({
-//             position: event.latLng,
-//             map: map
-//         });
-
-//         geocoder.geocode({ 'location': event.latLng }, function(results, status) {
-//             if (status === 'OK') {
-//                 if (results[0]) {
-//                     console.log('Endereço:', results[0].formatted_address);
-//                 }
-//             }
-//         });
-//     });
-
-//     var form = document.getElementById('address-form');
-//     form.addEventListener('submit', function(event) {
-//         event.preventDefault();
-//         var address = document.getElementById('address').value;
-
-//         geocoder.geocode({ 'address': address }, function(results, status) {
-//             if (status === 'OK') {
-//                 var location = results[0].geometry.location;
-//                 var marker = new google.maps.Marker({
-//                     position: location,
-//                     map: map
-//                 });
-//                 console.log('Novo Marcador Adicionado:', location.lat(), location.lng());
-//             } else {
-//                 console.error('Não foi possível encontrar o endereço:', status);
-//             }
-//         });
-//     });
-// }

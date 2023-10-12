@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="5"> -->
-    <title>Disque Denuncia</title>
+    <link rel="shortcut icon" href="reportIcon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
+    <title>Disque Denuncia</title>
     
 </head>
 
@@ -22,19 +22,18 @@
             
             <!-- Campo de entrada de texto 2 -->
             <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" required placeholder="Info...">
+            <input type="text" id="tipo" name="tipo" required placeholder="Ex: assalto, sequestro...">
 
             <label for="dataHora">Data e Hora:</label>
             <input type="datetime-local" id="dataHora" name="data-hora">
 
             <!-- Botão de envio do formulário -->
             <div id="botoes">
-                <button onclick="salvando()" type="submit">Enviar</button>
+                <button onclick="salvar()" type="submit">Enviar</button>
                 <button onclick="listar()" type="submit">Listar</button>
             </div>
         </form>
     </div>
-    <div id="resposta"></div>
     <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=&v=weekly" async defer></script>
     <script src="front.js"></script>
     

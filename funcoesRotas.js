@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
-const Ocorrencia = require('./ocorrencia')
-const sequelize = require('sequelize')
-const { v4: uuidv4 } = require('uuid');
 
+const Ocorrencia = require('./ocorrencia')
+const { v4: uuidv4 } = require('uuid');
 const cors = require('cors'); // permite a api se comunicar com outro site
 
 const app = express();
@@ -14,7 +14,7 @@ app.post('/ocorrencia', async (req, res) => {
     const geometria = {type: 'Point', coordinates:[req.body.longitude, req.body.latitude]}
     const data = req.body.data
     const hora = req.body.hora
-    const inserir = Ocorrencia.create({
+    const inserir = await Ocorrencia.create({
         id: uuidv4(),
         titulo: req.body.titulo,
         tipo: req.body.tipo,
@@ -27,11 +27,12 @@ app.post('/ocorrencia', async (req, res) => {
 
 app.get('/ocorrencia', async (req, res) => {
     const lista = await Ocorrencia.findAll();
-    console.log(lista);
-    // res.send(JSON.stringify(lista));
+    res.send(JSON.stringify(lista));
 })
 
-app.listen(3333, () => {
-    console.log("Funcionando");
+const porta = process.env.API_PORT;
+
+app.listen(porta, () => {
+    console.log(`Conectado na porta ${ porta }`);
 }
 );
