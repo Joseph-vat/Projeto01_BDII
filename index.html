@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="reportIcon.png" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <title>Disque Denuncia</title>
+    
+</head>
+
+<body>
+    <div id="form-container">
+        <h2 id="title">Adicionar Denúncia</h2>
+        <form id="address-form">
+            <div id="map"></div>
+
+            <div id="inputs">
+                <!-- Campo de entrada de texto 1 -->
+               <label for="titulo">Título:</label>
+               <input type="text" id="titulo" name="titulo" required>
+               
+               <!-- Campo de entrada de texto 2 -->
+               <label for="tipo">Tipo:</label>
+               <input type="text" id="tipo" name="tipo" required placeholder="Ex: assalto, sequestro...">
+    
+               <label for="dataHora">Data e Hora:</label>
+               <input type="datetime-local" id="dataHora" name="data-hora">
+            </div>
+
+
+            <!-- Botão de envio do formulário -->
+            <div id="botoes">
+                <button onclick="salvar()" type="submit">Enviar</button>
+                <button onclick="listar()" type="submit">Listar</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap&libraries=&v=weekly" async defer></script>
+    <script src="front.js"></script>
+    
+</body>
+</html>
