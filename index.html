@@ -16,16 +16,19 @@
         <form id="address-form">
             <div id="map"></div>
 
-             <!-- Campo de entrada de texto 1 -->
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" required>
-            
-            <!-- Campo de entrada de texto 2 -->
-            <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" required placeholder="Ex: assalto, sequestro...">
+            <div id="inputs">
+                <!-- Campo de entrada de texto 1 -->
+               <label for="titulo">Título:</label>
+               <input type="text" id="titulo" name="titulo" required>
+               
+               <!-- Campo de entrada de texto 2 -->
+               <label for="tipo">Tipo:</label>
+               <input type="text" id="tipo" name="tipo" required placeholder="Ex: assalto, sequestro...">
+    
+               <label for="dataHora">Data e Hora:</label>
+               <input type="datetime-local" id="dataHora" name="data-hora">
+            </div>
 
-            <label for="dataHora">Data e Hora:</label>
-            <input type="datetime-local" id="dataHora" name="data-hora">
 
             <!-- Botão de envio do formulário -->
             <div id="botoes">
