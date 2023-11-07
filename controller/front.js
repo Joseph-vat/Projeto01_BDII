@@ -37,6 +37,7 @@ function salvar() {
     const dataHora = document.getElementById('dataHora').value;
     const data = dataHora.split("T")[0]; // Separa a data
     const hora = dataHora.split("T")[1]; // Separa a hora
+    console.log(data);
 
     const ocorrencia = {
         titulo,
@@ -74,11 +75,9 @@ function listar() {
         return response.json();
     }).then(data => {
         data.forEach(data => {
-            console.log(data);
             const { localizacao, titulo } = data;
             const latitude = localizacao.coordinates[1];
             const longitude = localizacao.coordinates[0];
-            console.log(latitude, longitude);
 
             // Cria um marcador
             const marcador = new google.maps.Marker({
@@ -110,8 +109,38 @@ function listar() {
 };
 
 function atualizar(){
+    const titulo = document.getElementById('titulo').value;
+    const tipo = document.getElementById('tipo').value;
+    const dataHora = document.getElementById('dataHora').value;
+    const data = dataHora.split("T")[0]; // Separa a data
+    const hora = dataHora.split("T")[1]; // Separa a hora
+    const id=  document.getElementById('idDel').value
 
+    const ocorrencia = {
+        id,
+        titulo,
+        tipo,
+        // data,
+        // hora,
+        latitude,
+        longitude
+    };
+    
+    fetch('http://localhost:3333/ocorrencia', {
+        method: "PUT",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ocorrencia)
+    }).then(res => alert("Salvo com sucesso")
+    ).catch(error => alert("Falha ao salvar"))
+
+    marcadorUnico = true;
+    location.reload();
 }
+
+
 
 function deletar(){
     // const id = document.getElementById('idDel')
