@@ -4,8 +4,7 @@
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
     "pg-promise": "^11.5.4",
-    "sequelize": "^6.33.0",
-    "tsx": "^3.13.0"
+    "sequelize": "^6.33.0"
   },
   "name": "trabalho-de-bd-ii",
   "version": "1.0.0",
@@ -20,7 +19,8 @@
   "devDependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "tsx": "^3.13.0",
+    "mongoose": "^8.0.0",
+    "tsx": "^3.14.0",
     "uuid": "^9.0.1"
   },
   "description": ""

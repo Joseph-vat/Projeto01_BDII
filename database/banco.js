@@ -1,19 +1,15 @@
-const { Sequelize } = require('sequelize');
+require('dotenv').config();
+const mongoose = require('mongoose');
 
-const bancoDeDados = new Sequelize(process.env.PG_DATABASE, process.env.PG_USERNAME, process.env.PG_PASSWORD, {
-    host: process.env.PG_HOST ,
-    dialect: 'postgres' 
-  });
-  
-  async function conectar() {
-    try {
-      await bancoDeDados.authenticate();
-      console.log('Concetado com sucesso');
-    } catch (error) {
-      console.error('A conexão fallhou :(', error);
-    }
+async function connectToDatabase() {
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("Conectado ao banco de dados");
+  } catch (error) {
+    console.error("Erro ao conectar ao banco de dados:", error);
   }
-  
-  conectar();
-  
-  module.exports = bancoDeDados;
+}
+
+connectToDatabase().catch(err => console.log(err));
+
+module.exports = mongoose;

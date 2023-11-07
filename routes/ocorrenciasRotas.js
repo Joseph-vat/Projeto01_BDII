@@ -11,28 +11,35 @@ app.use(cors());
 
 
 app.post('/ocorrencia', async (req, res) => {
-    const geometria = {type: 'Point', coordinates:[req.body.longitude, req.body.latitude]}
+    const geometria = { type: 'Point', coordinates: [req.body.longitude, req.body.latitude] }
     const data = req.body.data
     const hora = req.body.hora
-    const inserir = await Ocorrencia.create({
-        id: uuidv4(),
+    const lat = req.body.latitude;
+    const lng = req.body.longitude;
+    const ocorrencia = new Ocorrencia({
         titulo: req.body.titulo,
         tipo: req.body.tipo,
-        data: data,
-        hora: hora,
-        geometria: geometria
+        // data: new Date(data),
+        // hora: new Date(hora),
+        localizacao: {
+            type: 'Point',
+            coordinates: [lng, lat]
+        }
     });
-    return res.status(200).json(inserir);
+
+    ocorrencia.save().then((retorno) => console.log(retorno)).catch(err => console.log(err));
+    
+    return res.status(200).json(ocorrencia);
 })
 
 app.get('/ocorrencia', async (req, res) => {
-    const lista = await Ocorrencia.findAll();
+    const lista = await Ocorrencia.find();
     res.send(JSON.stringify(lista));
 })
 
 const porta = process.env.API_PORT;
 
 app.listen(porta, () => {
-    console.log(`Conectado na porta ${ porta }`);
+    console.log(`Conectado na porta ${porta}`);
 }
 );

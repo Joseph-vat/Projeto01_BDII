@@ -1,6 +1,6 @@
 
 let center = { lat: -6.888463202449027, lng: -38.558930105104125 };
-let novoMarcador, map, unico = true;
+let novoMarcador, map, marcadorUnico = true;
 let latitude, longitude;
 
 function initMap() {
@@ -10,7 +10,7 @@ function initMap() {
     });
 
     map.addListener('click', (event) => {
-        if (unico) {
+        if (marcadorUnico) {
             novoMarcador = new google.maps.Marker({
                 position: event.latLng,
                 map: map,
@@ -19,10 +19,17 @@ function initMap() {
             });
             latitude = novoMarcador.getPosition().lat();
             longitude = novoMarcador.getPosition().lng();
-            unico = false;
+            marcadorUnico = false;
         }
     });
 }
+
+
+const Evento = require('./eventoModel');
+
+
+
+
 
 function salvar() {
     const titulo = document.getElementById('titulo').value;
@@ -31,27 +38,26 @@ function salvar() {
     const data = dataHora.split("T")[0]; // Separa a data
     const hora = dataHora.split("T")[1]; // Separa a hora
 
-    const objetoOcorrencia = {
-        id: "idTTemp",
-        titulo: titulo,
-        tipo: tipo,
-        data: data,
-        hora: hora,
-        latitude: latitude,
-        longitude: longitude,
+    const ocorrencia = {
+        titulo,
+        tipo,
+        // data,
+        // hora,
+        latitude,
+        longitude
     };
-
+    
     fetch('http://localhost:3333/ocorrencia', {
         method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(objetoOcorrencia)
+        body: JSON.stringify(ocorrencia)
     }).then(res => alert("Salvo com sucesso")
     ).catch(error => alert("Falha ao salvar"))
 
-    unico = true;
+    marcadorUnico = true;
     location.reload();
 };
 
@@ -68,9 +74,11 @@ function listar() {
         return response.json();
     }).then(data => {
         data.forEach(data => {
-            const { geometria, titulo } = data;
-            const latitude = geometria.coordinates[1]; // Assumindo que latitude está na posição 1
-            const longitude = geometria.coordinates[0];
+            console.log(data);
+            const { localizacao, titulo } = data;
+            const latitude = localizacao.coordinates[1];
+            const longitude = localizacao.coordinates[0];
+            console.log(latitude, longitude);
 
             // Cria um marcador
             const marcador = new google.maps.Marker({

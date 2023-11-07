@@ -1,39 +1,30 @@
-const { Sequelize, DataTypes, UUID } = require('sequelize');
-const bancoDeDados = require('../database/banco')
-const pgp = require('pg-promise')();
+const mongoose = require('../database/banco')
 
 //..................... Definindo a estrutura da tabela Ocorrencia ...................
-const Ocorrencia = bancoDeDados.define('Ocorrencia', {
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true,
+const { Schema } = mongoose;
+
+const ocorrenciaSchema = new Schema({
+  titulo: String,
+  tipo: String,
+  // data: Date,
+  // hora: Date,
+  localizacao: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
   },
-  titulo: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  tipo: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  data: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  hora: {
-    type: DataTypes.TIME,
-    allowNull: false
-  },
-  geometria: {
-    type: DataTypes.GEOMETRY,
-  }
 });
 
-async function sincronizar() {
-  await Ocorrencia.sync();
-  console.log("Sincronizando");
-}
-
-sincronizar();
+const Ocorrencia = mongoose.model('Ocorrencia', ocorrenciaSchema);
 
 module.exports = Ocorrencia;
+
+
+
+
