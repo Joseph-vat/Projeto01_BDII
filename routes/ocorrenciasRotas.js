@@ -37,6 +37,15 @@ app.get('/ocorrencia', async (req, res) => {
     res.send(JSON.stringify(lista));
 })
 
+app.delete('/ocorrencia', async (req, res) => {
+    const {id} = req.body;
+    console.log(id);
+    const deletando = await Ocorrencia.findOneAndDelete({_id:id});
+    console.log(deletando);
+    res.status(201).send(JSON.stringify("Deletado com sucesso"));
+
+})
+
 const porta = process.env.API_PORT;
 
 app.listen(porta, () => {

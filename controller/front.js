@@ -108,3 +108,31 @@ function listar() {
         });
     })
 };
+
+function atualizar(){
+
+}
+
+function deletar(){
+    // const id = document.getElementById('idDel')
+    const id = {
+        id: document.getElementById('idDel').value
+    };
+    fetch(`http://localhost:3333/ocorrencia`, {
+        method: "DELETE",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(id)
+    }).then(response => {
+        if (response.status === 201) {
+            alert("Excluído com sucesso");
+            location.reload(); // Recarrega a página ou executa outra ação após a exclusão
+        } else {
+            alert("Falha ao excluir");
+        }
+    }).catch(error => {
+        alert("Falha ao excluir");
+    });
+}
