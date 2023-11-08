@@ -42,8 +42,8 @@ function salvar() {
     const ocorrencia = {
         titulo,
         tipo,
-        // data,
-        // hora,
+        // data: new Date(data),
+        // hora: new Date(hora),
         latitude,
         longitude
     };
@@ -55,12 +55,38 @@ function salvar() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(ocorrencia)
-    }).then(res => alert("Salvo com sucesso")
-    ).catch(error => alert("Falha ao salvar"))
+    }).then(response => {
+            alert("Salvo com sucesso");
+            location.reload(); // Recarrega a página ou executa outra ação após a exclusão
+        
+    }).catch(error => {
+        alert("Falha ao salvar");
+    });
 
     marcadorUnico = true;
     location.reload();
 };
+
+async function listandoTabela(){
+    console.log("aqui");
+    const response = await fetch('http://localhost:3333/ocorrencia'); // Rota para buscar dados no servidor
+    const data = await response.json();
+    const tabela = document.getElementById('tabela');
+    const tbody = tabela.querySelector('tbody');
+    tbody.innerHTML = ''; // Limpa o conteúdo anterior da tabela
+
+    data.forEach((ocorrencia) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${ocorrencia._id}</td>
+            <td>${ocorrencia.titulo}</td>
+            <td>${ocorrencia.tipo}</td>
+            <td>${ocorrencia.dataHora}</td>
+        `;
+        tbody.appendChild(row);
+    });
+};
+
 
 function listar() {
     fetch('http://localhost:3333/ocorrencia', {
@@ -133,8 +159,12 @@ function atualizar(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(ocorrencia)
-    }).then(res => alert("Salvo com sucesso")
-    ).catch(error => alert("Falha ao salvar"))
+    }).then(res => {
+            alert("Atualizado com sucesso");
+            location.reload(); // Recarrega a página ou executa outra ação após a exclusão
+    }).catch(error => {
+        alert("Falha ao atualizar");
+    });
 
     marcadorUnico = true;
     location.reload();

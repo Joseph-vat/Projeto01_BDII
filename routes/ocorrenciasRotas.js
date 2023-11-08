@@ -15,8 +15,8 @@ app.post('/ocorrencia', async (req, res) => {
     const ocorrencia = new Ocorrencia({
         titulo,
         tipo,
-        // data: new Date(data),
-        // hora: new Date(hora),
+        data,
+        hora,
         localizacao: {
             type: 'Point',
             coordinates: [longitude, latitude]
@@ -29,15 +29,18 @@ app.post('/ocorrencia', async (req, res) => {
 })
 
 app.get('/ocorrencia', async (req, res) => {
-    const lista = await Ocorrencia.find();
-    res.send(JSON.stringify(lista));
+    try {
+        const lista = await Ocorrencia.find();
+        res.json(lista);
+    } catch (err) {
+        console.error('Erro ao buscar dados do MongoDB:', err);
+        res.status(500).send('Erro ao buscar dados do MongoDB');
+    }
 })
 
 app.delete('/ocorrencia', async (req, res) => {
     const { id } = req.body;
-    console.log(id);
     const deletando = await Ocorrencia.findOneAndDelete({ _id: id });
-    console.log(deletando);
     res.status(201).send(JSON.stringify("Deletado com sucesso"));
 
 })
@@ -52,6 +55,7 @@ app.put('/ocorrencia', async (req, res) => {
             }
         }
     })
+    res.status(500).send('Erro');
 })
 
 
