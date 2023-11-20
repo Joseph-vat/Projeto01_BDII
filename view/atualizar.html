@@ -14,9 +14,9 @@
     <nav class="navbar">
         <ul class="menu">
             <li><a href="../view/index.html">Página Inicial</a></li>
-            <li><a href="../view/enviar.html">Adicionar</a></li>
             <li><a href="../view/listar.html">Visualizar</a></li> 
             <li><a href="../view/atualizar.html">Atualizar</a></li>
+            <li><a href="../view/mapas.html">Mapas</a></li>
             <li><a href="../view/deletar.html">Deletar</a></li>
         </ul>
     </nav>
@@ -28,7 +28,7 @@
             <div id="inputs">
                 <!-- Campo de entrada de texto 1 -->
                <label for="titulo">Título:</label>
-               <input type="text" id="titulo" name="titulo" required>
+               <input type="text" id="titulo" name="titulo" required placeholder="Digite titulo da denuncia">
                
                <!-- Campo de entrada de texto 2 -->
                <label for="tipo">Tipo:</label>
@@ -37,8 +37,8 @@
                <label for="dataHora">Data e Hora:</label>
                <input type="datetime-local" id="dataHora" name="data-hora">
 
-               <label for="idDel">id Atualizar:</label>
-               <input type="text" id="idDel" name="idDel" required>
+               <label for="idDel">Id da Denúncia:</label>
+               <input type="text" id="idDel" name="idDel" required placeholder="Digite id da denuncia">
 
             </div>
 
