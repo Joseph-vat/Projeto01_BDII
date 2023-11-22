@@ -6,8 +6,9 @@ const { Schema } = mongoose;
 const ocorrenciaSchema = new Schema({
   titulo: String,
   tipo: String,
-  // data: Date,
-  // hora: Date,
+  dataHora: {
+    type: Date
+  },
   localizacao: {
     type: {
       type: String, // Don't do `{ location: { type: String } }`

@@ -35,15 +35,11 @@ function salvar() {
     const titulo = document.getElementById('titulo').value;
     const tipo = document.getElementById('tipo').value;
     const dataHora = document.getElementById('dataHora').value;
-    const data = dataHora.split("T")[0]; // Separa a data
-    const hora = dataHora.split("T")[1]; // Separa a hora
-    console.log(data);
 
     const ocorrencia = {
         titulo,
         tipo,
-        // data: new Date(data),
-        // hora: new Date(hora),
+        dataHora: new Date(dataHora).toISOString(), 
         latitude,
         longitude
     };
@@ -138,16 +134,14 @@ function atualizar(){
     const titulo = document.getElementById('titulo').value;
     const tipo = document.getElementById('tipo').value;
     const dataHora = document.getElementById('dataHora').value;
-    const data = dataHora.split("T")[0]; // Separa a data
-    const hora = dataHora.split("T")[1]; // Separa a hora
     const id=  document.getElementById('idDel').value
+    const dataHoras= new Date(dataHora).toISOString()
 
     const ocorrencia = {
         id,
         titulo,
         tipo,
-        // data,
-        // hora,
+        dataHora: dataHoras, 
         latitude,
         longitude
     };

@@ -11,12 +11,11 @@ app.use(cors());
 
 
 app.post('/ocorrencia', async (req, res) => {
-    const { data, hora, latitude, longitude, titulo, tipo } = req.body
+    const { latitude, longitude, titulo, tipo, dataHora } = req.body;
     const ocorrencia = new Ocorrencia({
         titulo,
         tipo,
-        data,
-        hora,
+        dataHora,
         localizacao: {
             type: 'Point',
             coordinates: [longitude, latitude]
@@ -46,10 +45,10 @@ app.delete('/ocorrencia', async (req, res) => {
 })
 
 app.put('/ocorrencia', async (req, res) => {
-    const { data, hora, latitude, longitude, titulo, tipo, id } = req.body
+    const { dataHora, latitude, longitude, titulo, tipo, id } = req.body
     const edite = await Ocorrencia.updateOne({ _id: id }, {
         $set: {
-            titulo: titulo, tipo: tipo, data: data, hora: hora, localizacao: {
+            titulo: titulo, tipo: tipo, dataHora: dataHora, localizacao: {
                 type: 'Point',
                 coordinates: [longitude, latitude]
             }
