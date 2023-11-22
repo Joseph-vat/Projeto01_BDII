@@ -1,28 +1,51 @@
-
-let center = { lat: -6.888463202449027, lng: -38.558930105104125 };
 let novoMarcador, map, marcadorUnico = true;
 let latitude, longitude;
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: center,
-        zoom: 14,
-    });
+    // Verifica se o navegador suporta a API de Geolocalização
+    if ("geolocation" in navigator) {
+        // Obtém a localização atual do usuário
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const center = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
 
-    map.addListener('click', (event) => {
-        if (marcadorUnico) {
-            novoMarcador = new google.maps.Marker({
-                position: event.latLng,
-                map: map,
-                title: document.getElementById('titulo').value,
-                draggable: true
-            });
-            latitude = novoMarcador.getPosition().lat();
-            longitude = novoMarcador.getPosition().lng();
-            marcadorUnico = false;
-        }
-    });
+                // Cria o mapa com o centro na localização atual do usuário
+                map = new google.maps.Map(document.getElementById("map"), {
+                    center: center,
+                    zoom: 14,
+                });
+
+                latitude = center.lat;
+                longitude = center.lng;
+
+                // Adiciona um evento de clique no mapa
+                map.addListener('click', (event) => {
+                    if (marcadorUnico) {
+                        novoMarcador = new google.maps.Marker({
+                            position: event.latLng,
+                            map: map,
+                            title: document.getElementById('titulo').value,
+                            draggable: true
+                        });
+
+                        latitude = novoMarcador.getPosition().lat();
+                        longitude = novoMarcador.getPosition().lng();
+                        marcadorUnico = false;
+                    }
+                });
+            },
+            (error) => {
+                console.error(`Erro ao obter localização: ${error.message}`);
+            }
+        );
+    } else {
+        console.error("Geolocalização não suportada pelo navegador");
+    }
 }
+
 
 
 const Evento = require('./eventoModel');
