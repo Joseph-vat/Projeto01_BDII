@@ -34,27 +34,23 @@ conectar();
 
 
 // ------------- MIDDLEWARES E FUNÇÕES
-const checkCache = (req, res, next) => {
-    const cacheKey = '/ocorrencia';
+// const checkCache = (req, res, next) => {
+//     const cacheKey = '/ocorrencia';
 
-    client.get(cacheKey, (err, data) => {
-        if (err) throw err;
+//     client.get(cacheKey, (err, data) => {
+//         if (err) throw err;
 
-        if (data !== null) {
-            req.cacheData = JSON.parse(data);
-        }
-        console.log("Middleware");
+//         if (data !== null) {
+//            res.json(JSON.parse(data));
+//         }
+//         next();
+//     });
+// };
 
-        next();
-    });
-};
-
-async function addCache(rota) {
-    const cacheKey = rota;
-    const lista = await Ocorrencia.find();
-    client.setEx(cacheKey, 60, JSON.stringify(lista));
+async function addCache(cacheKey) {
+    client.setEx(cacheKey, 600, JSON.stringify(await Ocorrencia.find()));
     const dados = await client.get(cacheKey);
-    return JSON.parse(dados);
+    return dados;
 }
 
 app.post('/ocorrencia', async (req, res) => {
@@ -68,21 +64,11 @@ app.post('/ocorrencia', async (req, res) => {
             coordinates: [longitude, latitude],
         },
     });
-
     try {
         await ocorrencia.save();
         console.log('Ocorrência salva no MongoDB:', ocorrencia);
-
-        // Salvar novo dado no cache
-        const cacheKey = "/ocorrencia";
-        const lista = await Ocorrencia.find();
-        client.setEx(cacheKey, 60, JSON.stringify(lista));
-        const dados = await client.get(cacheKey);
-        // console.log(dados);
-        req.cacheData = dados
-        console.log(req.cacheData);
-
-        res.status(200).json(req.cacheData);
+        // função para salvar dados no redis
+        return res.json(JSON.parse(await addCache("/ocorrencia")));
     } catch (err) {
         console.error('Erro ao salvar a ocorrência no MongoDB:', err);
         res.status(500).json({ error: 'Erro ao salvar a ocorrência no MongoDB' });
@@ -91,20 +77,14 @@ app.post('/ocorrencia', async (req, res) => {
 
 app.get('/ocorrencia', async (req, res) => {
     try {
-        if (req.cacheData) {
-            console.log("oi");
-            console.log('Dados do cache disponíveis na rota:', req.cacheData);
-            res.json(req.cacheData);
-        }
-        //parte 1: salvando dados no banco mongo
-        const lista = await Ocorrencia.find();
-        const cacheKey = '/ocorrencia';
-        client.setEx(cacheKey, 500, JSON.stringify(lista));
-        res.json(lista);
+        const dadosCache = await client.get("/ocorrencia"); //buscando dados no redis
 
-        //parte 2: exibindo dados do banco redis 
-        // const dados = await client.get('/ocorrencia')
-        // res.json(JSON.parse(dados));
+        if (dadosCache) { //verificando se tem ou não cache
+            // retornando dados do redis
+            return res.json(JSON.parse(dadosCache));
+        }
+        //retornando dados do mongo
+        return res.json(JSON.parse(await addCache("/ocorrencia")));
     } catch (err) {
         console.error('Erro ao buscar dados do MongoDB:', err);
         res.status(500).json({ error: 'Erro ao buscar dados do MongoDB' });
@@ -114,6 +94,8 @@ app.get('/ocorrencia', async (req, res) => {
 app.delete('/ocorrencia', async (req, res) => {
     const { id } = req.body;
     const deletando = await Ocorrencia.findOneAndDelete({ _id: id });
+
+    
 
     // Invalidar o cache relacionado após a exclusão
     const cacheKey = '/ocorrencia';
