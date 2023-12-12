@@ -46,14 +46,6 @@ function initMap() {
     }
 }
 
-
-
-const Evento = require('./eventoModel');
-
-
-
-
-
 function salvar() {
     const titulo = document.getElementById('titulo').value;
     const tipo = document.getElementById('tipo').value;
@@ -202,7 +194,7 @@ function deletar(){
         },
         body: JSON.stringify(id)
     }).then(response => {
-        if (response.status === 201) {
+        if (response.status === 200) {
             alert("Excluído com sucesso");
             location.reload(); // Recarrega a página ou executa outra ação após a exclusão
         } else {

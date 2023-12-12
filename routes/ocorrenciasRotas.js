@@ -50,6 +50,7 @@ conectar();
 async function addCache(cacheKey) {
     client.setEx(cacheKey, 600, JSON.stringify(await Ocorrencia.find()));
     const dados = await client.get(cacheKey);
+    console.log("redis");
     return dados;
 }
 
@@ -95,13 +96,7 @@ app.delete('/ocorrencia', async (req, res) => {
     const { id } = req.body;
     const deletando = await Ocorrencia.findOneAndDelete({ _id: id });
 
-    
-
-    // Invalidar o cache relacionado após a exclusão
-    const cacheKey = '/ocorrencia';
-    client.del(cacheKey);
-
-    res.status(201).json({ message: 'Deletado com sucesso' });
+    return res.status(200).json(JSON.parse(await addCache("/ocorrencia")));
 });
 
 app.put('/ocorrencia', async (req, res) => {
@@ -123,11 +118,7 @@ app.put('/ocorrencia', async (req, res) => {
             }
         );
 
-        // Invalidar o cache relacionado após a atualização
-        const cacheKey = '/ocorrencia';
-        client.del(cacheKey);
-
-        res.status(200).json({ message: 'Atualizado com sucesso' });
+        return res.json(JSON.parse(await addCache("/ocorrencia")));
     } catch (err) {
         console.error('Erro ao atualizar a ocorrência no MongoDB:', err);
         res.status(500).json({ error: 'Erro ao atualizar a ocorrência no MongoDB' });
