@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../reportIcon.png" type="image/x-icon">
+    <title>Deletar Denúncia</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul class="menu">
+            <li><a href="../view/index.html">Página Inicial</a></li>
+            <li><a href="../view/listar.html">Visualizar</a></li>
+            <li><a href="../view/atualizar.html">Atualizar</a></li>
+            <li><a href="../view/mapas.html">Mapas</a></li>
+            <li><a href="../view/deletar.html">Deletar</a></li>
+        </ul>
+    </nav>
+    <div id="form-container">
+        <h1 id="listarOcoh1">Deletar Denúncia</h1>
+        <div id="inputs">
+       <label for="idDel">Id da Denúncia:</label>
+       <input type="text" id="idDel" name="idDel" placeholder="Digite o id da denuncia">
+
+    </div>
+        
+        <div id="botoes">
+            <button onclick="deletar()" type="submit">Deletar</button>
+        </div>
+    </div>
+    <script src="../controller/front.js"></script>
+</body>
+
+</html>
