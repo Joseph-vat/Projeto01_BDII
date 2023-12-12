@@ -94,15 +94,17 @@ app.get('/ocorrencia', async (req, res) => {
         if (req.cacheData) {
             console.log("oi");
             console.log('Dados do cache disponíveis na rota:', req.cacheData);
-            return res.json(req.cacheData);
+            res.json(req.cacheData);
         }
+        //parte 1: salvando dados no banco mongo
         const lista = await Ocorrencia.find();
-
-        // Atualizar o cache com os dados do MongoDB
         const cacheKey = '/ocorrencia';
-        client.setEx(cacheKey, 60, JSON.stringify(lista));
-
+        client.setEx(cacheKey, 500, JSON.stringify(lista));
         res.json(lista);
+
+        //parte 2: exibindo dados do banco redis 
+        // const dados = await client.get('/ocorrencia')
+        // res.json(JSON.parse(dados));
     } catch (err) {
         console.error('Erro ao buscar dados do MongoDB:', err);
         res.status(500).json({ error: 'Erro ao buscar dados do MongoDB' });
