@@ -1,40 +1,39 @@
 let novoMarcador, map, marcadorUnico = true;
 let latitude, longitude;
 
+let marker;
+
 function initMap() {
     // Verifica se o navegador suporta a API de Geolocalização
     if ("geolocation" in navigator) {
         // Obtém a localização atual do usuário
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const center = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
+                const center = [position.coords.latitude, position.coords.longitude];
 
                 // Cria o mapa com o centro na localização atual do usuário
-                map = new google.maps.Map(document.getElementById("map"), {
-                    center: center,
-                    zoom: 14,
+                map = L.map('map').setView([-7.12198623798319, -38.507744339268505], 13);
+
+                // Adiciona o mapa de tiles (pode escolher outro provedor)
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+                
+                marker = L.marker(center, { draggable: true }).addTo(map);
+
+                // Adiciona um evento de arrasto ao marcador
+                marker.on('dragend', () => {
+                    const newPosition = marker.getLatLng();
+                    latitude = newPosition.lat;
+                    longitude = newPosition.lng;
                 });
 
-                latitude = center.lat;
-                longitude = center.lng;
-
                 // Adiciona um evento de clique no mapa
-                map.addListener('click', (event) => {
-                    if (marcadorUnico) {
-                        novoMarcador = new google.maps.Marker({
-                            position: event.latLng,
-                            map: map,
-                            title: document.getElementById('titulo').value,
-                            draggable: true
-                        });
-
-                        latitude = novoMarcador.getPosition().lat();
-                        longitude = novoMarcador.getPosition().lng();
-                        marcadorUnico = false;
-                    }
+                map.on('click', (event) => {
+                    const newLatLng = event.latlng;
+                    marker.setLatLng(newLatLng);
+                    latitude = newLatLng.lat;
+                    longitude = newLatLng.lng;
                 });
             },
             (error) => {
@@ -45,6 +44,9 @@ function initMap() {
         console.error("Geolocalização não suportada pelo navegador");
     }
 }
+
+initMap();
+
 
 function salvar() {
     const titulo = document.getElementById('titulo').value;
@@ -98,6 +100,52 @@ async function listandoTabela(){
     });
 };
 
+
+function listar() {
+    fetch('http://localhost:3333/ocorrencia', {
+        method: "GET",
+        headers: {
+            'Accept': 'application/json',
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Erro na requisição');
+        }
+        return response.json();
+    }).then(data => {
+        data.forEach(data => {
+            const { localizacao, titulo } = data;
+            const latitude = localizacao.coordinates[1];
+            const longitude = localizacao.coordinates[0];
+
+            // Cria um marcador
+            const marcador = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map, // 'map' é a referência para seu mapa do Google Maps
+                title: titulo, // Título do marcador (exibido quando o usuário passa o mouse sobre o marcador)
+            });
+
+            const janelaInfo = `
+              <div id="content">
+                <div id="siteNotice">
+                </div>
+                <h2> ${data.titulo}</h2>
+                <p> <b> Tipo: </b> ${data.tipo}</p>
+                <p> <b> Data: </b> ${data.data}</p>
+                <p> <b> Hora: </b> ${data.hora}</p>
+                </div>
+              </div>`;
+            marcador.addListener('click', () => {
+                const infoWindow = new google.maps.InfoWindow({
+                    content: janelaInfo,
+                });
+                infoWindow.open(map, marcador);
+            });
+        }).catch(error => {
+            console.error('Erro:', error);
+        });
+    })
+};
 
 function atualizar(){
     const titulo = document.getElementById('titulo').value;
