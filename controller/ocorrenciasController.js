@@ -7,7 +7,7 @@ mongoose.set('strictQuery', true);
 async function addCache(cacheKey) {
     client.setEx(cacheKey, 600, JSON.stringify(await Ocorrencia.find()));
     const dados = await client.get(cacheKey);
-    console.log("redis");
+    console.log("Salvo no redis");
     return dados;
 }
 
@@ -40,6 +40,7 @@ export async function listarOcorrencias(req, res) {
 
         if (dadosCache) { //verificando se tem ou não cache
             // retornando dados do redis
+            console.log("Dados do cache");
             return res.json(JSON.parse(dadosCache));
         }
         //retornando dados do mongo
