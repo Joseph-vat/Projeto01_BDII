@@ -99,52 +99,6 @@ async function listandoTabela(){
 };
 
 
-function listar() {
-    fetch('http://localhost:3333/ocorrencia', {
-        method: "GET",
-        headers: {
-            'Accept': 'application/json',
-        }
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error('Erro na requisição');
-        }
-        return response.json();
-    }).then(data => {
-        data.forEach(data => {
-            const { localizacao, titulo } = data;
-            const latitude = localizacao.coordinates[1];
-            const longitude = localizacao.coordinates[0];
-
-            // Cria um marcador
-            const marcador = new google.maps.Marker({
-                position: { lat: latitude, lng: longitude },
-                map: map, // 'map' é a referência para seu mapa do Google Maps
-                title: titulo, // Título do marcador (exibido quando o usuário passa o mouse sobre o marcador)
-            });
-
-            const janelaInfo = `
-              <div id="content">
-                <div id="siteNotice">
-                </div>
-                <h2> ${data.titulo}</h2>
-                <p> <b> Tipo: </b> ${data.tipo}</p>
-                <p> <b> Data: </b> ${data.data}</p>
-                <p> <b> Hora: </b> ${data.hora}</p>
-                </div>
-              </div>`;
-            marcador.addListener('click', () => {
-                const infoWindow = new google.maps.InfoWindow({
-                    content: janelaInfo,
-                });
-                infoWindow.open(map, marcador);
-            });
-        }).catch(error => {
-            console.error('Erro:', error);
-        });
-    })
-};
-
 function atualizar(){
     const titulo = document.getElementById('titulo').value;
     const tipo = document.getElementById('tipo').value;

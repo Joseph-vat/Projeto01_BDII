@@ -1,4 +1,4 @@
-const mongoose = require('../database/banco')
+const {mongoose} = require('../database/banco')
 
 //..................... Definindo a estrutura da tabela Ocorrencia ...................
 const { Schema } = mongoose;
